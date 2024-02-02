@@ -19,7 +19,7 @@ class MyWidget(QMainWindow, Ui_MainWindow):
         self.type_map = 'map'
         self.lon = 39.558881  # широта
         self.lat = 50.199912  # долгота
-        self.z = 19
+        self.z = 16
         self.get_image_map()
         for radio_button in self.map_group.buttons():
             radio_button.toggled.connect(self.set_map)
@@ -35,7 +35,7 @@ class MyWidget(QMainWindow, Ui_MainWindow):
         self.get_image_map()
 
     def get_image_map(self):
-        map_request = f"https://static-maps.yandex.ru/1.x/?ll={self.lon},{self.lat}&l={self.type_map}&z=17"
+        map_request = f"https://static-maps.yandex.ru/1.x/?ll={self.lon},{self.lat}&l={self.type_map}&z={self.z}"
         response = requests.get(map_request)
         self.map_label.setPixmap(QPixmap.fromImage(ImageQt.ImageQt(Image.open(BytesIO(response.content)))))
 
