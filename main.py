@@ -10,7 +10,7 @@ from io import BytesIO
 
 lat = 39.558881  # широта
 lon = 50.199912  # долгота
-z = 16
+z = 19
 x = None
 
 
@@ -30,11 +30,19 @@ class MyWidget(QMainWindow, Ui_MainWindow):
         self.map_label.setPixmap(QPixmap.fromImage(ImageQt.ImageQt(Image.open(BytesIO(response.content)))))
 
     def keyPressEvent(self, event):
-        global z
-        if event.key() == Qt.Key.Key_PageUp and z < 17:
+        global z, lat, lon
+        if event.key() == Qt.Key.Key_PageUp and z < 19:
             z += 1
-        if event.key() == Qt.Key.Key_PageDown and z > 1:
+        if event.key() == Qt.Key.Key_PageDown and z > 0:
             z -= 1
+        if event.key() == Qt.Key.Key_Left:
+            lat -= 0
+        if event.key() == Qt.Key.Key_Right:
+            lat += 0
+        if event.key() == Qt.Key.Key_Up:
+            lon += 0
+        if event.key() == Qt.Key.Key_Down:
+            lon -= 0
         self.get_image_map()
 
 
