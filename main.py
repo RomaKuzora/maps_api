@@ -1,11 +1,11 @@
 import sys
 
-from PyQt6.QtGui import QPixmap
+from PyQt6.QtGui import QPixmap, QImage
 from PyQt6.QtWidgets import QApplication, QMainWindow
 from map_design import Ui_MainWindow
 import requests
 from PyQt6.QtCore import Qt
-from PIL import Image, ImageQt
+from PIL import Image
 from io import BytesIO
 
 
@@ -37,7 +37,11 @@ class MyWidget(QMainWindow, Ui_MainWindow):
     def get_image_map(self):
         map_request = f"https://static-maps.yandex.ru/1.x/?ll={self.lon},{self.lat}&l={self.type_map}&z={self.z}"
         response = requests.get(map_request)
-        self.map_label.setPixmap(QPixmap.fromImage(ImageQt.ImageQt(Image.open(BytesIO(response.content)))))
+        image = Image.open(BytesIO(response.content))
+        image.save('image.png')
+        image = QImage('image.png')
+        pixmap = QPixmap(image)
+        self.map_label.setPixmap(pixmap)
 
     def keyPressEvent(self, event):
         if event.key() == Qt.Key.Key_PageUp and self.z < 19:
