@@ -10,7 +10,8 @@ from io import BytesIO
 
 lat = 39.558881  # широта
 lon = 50.199912  # долгота
-spn = 0.005
+z = 16
+x = None
 
 
 # 0.001 min
@@ -21,24 +22,19 @@ class MyWidget(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+        self.get_image_map()
 
     def get_image_map(self):
-        map_request = f"http://static-maps.yandex.ru/1.x/?ll={lat},{lon}&spn={spn},{spn}&l=map"
+        map_request = f"http://static-maps.yandex.ru/1.x/?ll={lat},{lon}&z={z}&l=map"
         response = requests.get(map_request)
         self.map_label.setPixmap(QPixmap.fromImage(ImageQt.ImageQt(Image.open(BytesIO(response.content)))))
 
     def keyPressEvent(self, event):
-        global spn
-        if event.key() == Qt.Key.Key_PageUp and spn > 0.001:
-            if spn <= 1:
-                spn -= 0.001
-            else:
-                spn -= 1
-        if event.key() == Qt.Key.Key_PageDown and spn < 75:
-            if spn <= 1:
-                spn += 0.001
-            else:
-                spn += 1
+        global z
+        if event.key() == Qt.Key.Key_PageUp and z < 17:
+            z += 1
+        if event.key() == Qt.Key.Key_PageDown and z > 1:
+            z -= 1
         self.get_image_map()
 
 
