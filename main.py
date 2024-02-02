@@ -36,13 +36,13 @@ class MyWidget(QMainWindow, Ui_MainWindow):
         if event.key() == Qt.Key.Key_PageDown and z > 0:
             z -= 1
         if event.key() == Qt.Key.Key_Left:
-            lat -= 0
+            lat -= 2 / (z ** 2)
         if event.key() == Qt.Key.Key_Right:
-            lat += 0
+            lat += 2 / (z ** 2)
         if event.key() == Qt.Key.Key_Up:
-            lon += 0
+            lon += 2 / (z ** 2)
         if event.key() == Qt.Key.Key_Down:
-            lon -= 0
+            lon -= 2 / (z ** 2)
         self.get_image_map()
 
 
