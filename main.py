@@ -57,8 +57,9 @@ class MyWidget(QMainWindow):
             self.pt_lon, self.pt_lat = list(map(float, _object_[0].split(',')))
             self.flag_point = True
             self.get_image_map(flag=False)
-            adress = geocode(self.edit_name.text())
-            self.adress_label.setText(adress['metaDataProperty']['GeocoderMetaData']['Address']['formatted'])
+            adress = geocode(self.edit_name.text())['metaDataProperty']['GeocoderMetaData']['Address']['formatted']
+            adress = "\n".join(adress.split(', '))
+            self.adress_label.setText(adress)
 
     def set_map(self):
         sender = self.sender().text()
