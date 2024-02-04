@@ -1,20 +1,20 @@
 import sys
 from pprint import pprint
 
+from PyQt6 import uic  # Импортируем uic
 from PyQt6.QtGui import QPixmap, QImage
 from PyQt6.QtWidgets import QApplication, QMainWindow
-from map_design import Ui_MainWindow
 import requests
 from PyQt6.QtCore import Qt
 from PIL import Image
 from io import BytesIO
-from geocoder import get_ll_span
+from geocoder import get_ll_span, geocode
 
 
-class MyWidget(QMainWindow, Ui_MainWindow):
+class MyWidget(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setupUi(self)
+        uic.loadUi('map.ui', self)
         self.initUi()
 
     def initUi(self):
@@ -47,7 +47,7 @@ class MyWidget(QMainWindow, Ui_MainWindow):
         self.flag_point = False
         self.edit_name.setText('')
         self.get_image_map()
-
+        self.adress_label.setText('')
 
     def get_coord(self):
         if self.edit_name.text():
@@ -57,6 +57,8 @@ class MyWidget(QMainWindow, Ui_MainWindow):
             self.pt_lon, self.pt_lat = list(map(float, _object_[0].split(',')))
             self.flag_point = True
             self.get_image_map(flag=False)
+            adress = geocode(self.edit_name.text())
+            self.adress_label.setText(adress['metaDataProperty']['GeocoderMetaData']['Address']['formatted'])
 
     def set_map(self):
         sender = self.sender().text()
