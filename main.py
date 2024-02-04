@@ -27,12 +27,17 @@ class MyWidget(QMainWindow):
         self.pt_lon = 0
         self.pt_lat = 0
         self.flag_point = False
+        self.flag_mail = False
         self.get_image_map()
         self.radio_button_map.setChecked(1)
         self.restart_button.clicked.connect(self.restart)
+        self.mail_index_box.toggled.connect(self.mail_index)
         for radio_button in self.map_group.buttons():
             radio_button.toggled.connect(self.set_map)
         self.find_button.clicked.connect(self.get_coord)
+
+    def mail_index(self):
+        self.flag_mail = not self.flag_mail
 
     def restart(self):
         self.type_map = 'map'
@@ -48,6 +53,7 @@ class MyWidget(QMainWindow):
         self.edit_name.setText('')
         self.get_image_map()
         self.adress_label.setText('')
+        self.flag_mail = False
 
     def get_coord(self):
         if self.edit_name.text():
@@ -57,9 +63,14 @@ class MyWidget(QMainWindow):
             self.pt_lon, self.pt_lat = list(map(float, _object_[0].split(',')))
             self.flag_point = True
             self.get_image_map(flag=False)
-            adress = geocode(self.edit_name.text())['metaDataProperty']['GeocoderMetaData']['Address']['formatted']
-            adress = "\n".join(adress.split(', '))
-            self.adress_label.setText(adress)
+            adress = geocode(self.edit_name.text())['metaDataProperty']['GeocoderMetaData']['Address']
+            _adress_ = "\n".join(adress['formatted'].split(', '))
+            if self.flag_mail:
+                mail_adress = adress['postal_code']
+                self.adress_label.setText(_adress_+f'\nпочтовый индекс: {mail_adress}')
+            else:
+                self.adress_label.setText(_adress_)
+
 
     def set_map(self):
         sender = self.sender().text()
