@@ -38,6 +38,7 @@ class MyWidget(QMainWindow):
 
     def mail_index(self):
         self.flag_mail = not self.flag_mail
+        self.get_coord()
 
     def restart(self):
         self.type_map = 'map'
@@ -66,8 +67,12 @@ class MyWidget(QMainWindow):
             adress = geocode(self.edit_name.text())['metaDataProperty']['GeocoderMetaData']['Address']
             _adress_ = "\n".join(adress['formatted'].split(', '))
             if self.flag_mail:
-                mail_adress = adress['postal_code']
-                self.adress_label.setText(_adress_+f'\nпочтовый индекс: {mail_adress}')
+                try:
+                    mail_adress = adress['postal_code']
+                    self.adress_label.setText(_adress_+f'\nпочтовый индекс: {mail_adress}')
+                except KeyError:
+                    self.adress_label.setText(_adress_)
+
             else:
                 self.adress_label.setText(_adress_)
 
