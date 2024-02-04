@@ -29,9 +29,25 @@ class MyWidget(QMainWindow, Ui_MainWindow):
         self.flag_point = False
         self.get_image_map()
         self.radio_button_map.setChecked(1)
+        self.restart_button.clicked.connect(self.restart)
         for radio_button in self.map_group.buttons():
             radio_button.toggled.connect(self.set_map)
         self.find_button.clicked.connect(self.get_coord)
+
+    def restart(self):
+        self.type_map = 'map'
+        self.lon = 39.558881  # широта
+        self.lat = 50.199912  # долгота
+        self.z = 16
+        self.spn_lon = 0.005
+        self.spn_lat = 0.005
+        self.pt_lon = 0
+        self.pt_lat = 0
+        self.radio_button_map.setChecked(1)
+        self.flag_point = False
+        self.edit_name.setText('')
+        self.get_image_map()
+
 
     def get_coord(self):
         if self.edit_name.text():
